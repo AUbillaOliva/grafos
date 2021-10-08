@@ -1,0 +1,162 @@
+<!--SECONDARY NETWORK-->
+<div id="secondary-network" class="mt-5 me-1 ms-1"></div>
+
+<div class="col">
+  <div
+    class="
+      mt-5
+      float-none
+      ms-5
+      me-5
+      d-inline-flex
+      bd-highlight
+      mb-3
+      align-items-stretch
+      bd-highlight
+    "
+  >
+    <div class="p-2 bd-highlight flex-column" style="width: 180px">
+      <button
+        style="width: 160px"
+        class="mb-3 mt-3 btn btn-primary"
+        id="añadir"
+        href="javascript:;"
+        onclick="addNode();"
+      >
+        Añadir
+      </button>
+      <form class="mb-3">
+        <select
+          class="form-select"
+          name="ELIMINAR"
+          style="width: 160px"
+        ></select>
+      </form>
+      <button
+        style="width: 160px"
+        id="eliminarnodo"
+        href="javascript:;"
+        onclick="deleteNode();"
+        class="btn btn-primary"
+      >
+        Eliminar
+      </button>
+      <br /><br />
+      <button
+        style="width: 160px"
+        id="conexo"
+        href="javascript:;"
+        onclick="recargar();"
+        class="btn btn-primary"
+      >
+        Conexo
+      </button>
+      <br />
+      <input
+        style="width: 160px"
+        type="button"
+        class="btn btn-primary mb-3 mt-3"
+        value="Euleriano"
+        onclick="imprimireuleriano()"
+      />
+      <br />
+      <input
+        style="width: 160px"
+        type="button"
+        class="btn btn-primary mb-3 mt-3"
+        value="Hamiltoniano"
+        onclick="imprimirhamiltoniano2()"
+      />
+      <div class="bd-highlight flex-column">
+        <input
+          style="width: 160px"
+          class="btn btn-primary mb-3 mt-3"
+          type="button"
+          value="s"
+          onclick="genera_tabla()"
+        />
+        <a href="#openModal">Abrir modal</a>
+        <div id="openModal" class="modalDialog">
+          <div>
+            <a href="#close" title="Close" class="close">X</a>
+            <h2>s</h2>
+            <table
+              th="tabla"
+              id="matrizdecaminos"
+              class="table table-white table-striped"
+            ></table>
+          </div>
+        </div>
+      </div>
+      <input
+        style="width: 160px"
+        type="button"
+        class="btn btn-primary mb-3 mt-3"
+        value="Instrucciones"
+        onclick="instrucciones()"
+      />
+      <input
+        style="width: 160px"
+        type="button"
+        class="btn btn-primary mb-3 mt-3"
+        value="Descargar log"
+        onclick="archivo()"
+      />
+      <div id="download" class=""></div>
+    </div>
+  </div>
+</div>
+
+<div class="formulario p-2 bd-highlight">
+  <h5 class="card-title">Conectar Nodos</h5>
+  <form id="" action="" method="get">
+    <label>Desde</label>
+    <select class="form-select" name="DESDE" style="width: 150px"></select>
+    <label>Hasta</label>
+    <select class="form-select" name="HASTA" style="width: 150px"></select>
+    <div class="mb-3">
+      <label class="form-label">Peso de arista</label>
+      <input
+        name="PESO"
+        min="1"
+        type="number"
+        class="form-control"
+        id="formulariopeso"
+        style="width: 150px"
+      />
+    </div>
+  </form>
+  <button
+    id="conectar"
+    href="javascript:;"
+    onclick="conectarnodos();"
+    class="btn btn-primary"
+  >
+    Conectar Nodos
+  </button>
+  <br /><br />
+  <div role="tabpanel" id="shortestPath">
+    <h5 class="card-title">Camino mas corto entre:</h5>
+    <div class="form-inline form-group">
+      <label>Nodo inicial</label>
+      <select
+        class="form-select"
+        name="nodoinicial"
+        style="width: 150px"
+      ></select>
+      <label>Nodo Final</label>
+      <select
+        class="form-select"
+        name="nodofinal"
+        style="width: 150px"
+      ></select>
+      <input
+        type="button"
+        onclick="recargarCamino();"
+        class="btn btn-primary mt-3"
+        value="Calcular Camino"
+      />
+      <div id="Camino" class="mt-3 justify-center"></div>
+    </div>
+  </div>
+</div>

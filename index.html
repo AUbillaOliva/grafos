@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+        <!-- Bootstrap CSS -->
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+            integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+            crossorigin="anonymous"
+        />
+
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="vis.min.css" />
+        <script src="vis-network.js"></script>
+        <script src="plog.js"></script>
+        <script src="Dijkstra's-algorithm.js"></script>
+        <script src="primary-network.js" defer></script>
+        <script src="secondary-network.js" defer></script>
+
+        <title>Hello, world!</title>
+    </head>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">Proyecto grafos</a>
+            </div>
+        </nav>
+    </header>
+    <body>
+        <div class="container">
+            <div class="mt-5 mb-5">
+                <p>
+                    Este proyecto consiste en una actividad realizada por estudiantes de la Universidad Tecnologica Metropolitana para la asignatura de Grafos y Lenguajes Formales.
+                    El proyecto es de código abierto, por lo que cualquier persona puede leer, actualizar o eliminar el codigo a su gusto. Para poder acceder al código de esta
+                    página vistita el <a href="https://github.com/AUbillaOliva/grafos">repositiorio</a>
+                    Los autores de este código son: Álvaro Ubilla Cristóbal Ramírez Fabian pozzo Maximiliano Olave Esta página trabaja con grafos, con la finalidad de poder
+                    realizar las operaciones necesarias.
+                </p>
+            </div>
+            <a class="btn btn-primary mb-3 mt-3" href="/instrucciones.html">Instrucciones</a>
+            <input type="button" class="btn btn-primary mb-3 mt-3" value="Descargar log" onclick="archivo()" />
+            <div class="col mb-5 mt-5">
+                <div class="">
+                    <h1>Grafo N°1</h1>
+                    <div class="col">
+                        <div class="align-items-stretch">
+                            <div class="col">
+                                <!-- AÑADIR NODO -->
+                                <button type="button" class="btn btn-primary mb-3 mt-3" data-toggle="modal" data-target="#primary-network-add-node-modal">Añadir nodo</button>
+                                <!-- AÑADIR CAMINO -->
+                                <button type="button" class="btn btn-primary mb-3 mt-3" data-toggle="modal" data-target="#primary-network-add-edge-modal">Agregar camino</button>
+                                <button id="conexo" href="javascript:;" onclick="recargar();" class="btn btn-primary">Conexo</button>
+                                <input type="button" class="btn btn-primary mb-3 mt-3" value="Euleriano" onclick="imprimireuleriano()" />
+                                <input type="button" class="btn btn-primary mb-3 mt-3" value="Hamiltoniano" onclick="imprimirhamiltoniano2()" />
+                                <!-- <input class="btn btn-primary mb-3 mt-3" type="button" value="s" onclick="createSecondaryTable()" /> -->
+                                <!-- <button type="button" class="btn btn-primary mb-3 mt-3" onclick="show();">Mostrar matriz</button> -->
+                                <button type="button" class="btn btn-primary mb-3 mt-3" data-toggle="modal" data-target="#primary-network-show-matrix" onclick="show();">
+                                    Matriz de adyacencia
+                                </button>
+                                <div id="download" class=""></div>
+                                <!-- SECONDARY ZONE -->
+                                <div class="w-100">
+                                    <h4>Acciones secundarias</h4>
+                                    <hr />
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="deleteArrows();">Eliminar flechas</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="setArrows();">Reasignar flechas</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="isWeightedGraph();">Grafo ponderado</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="isDirectionalGraph();">Verificar direcciones</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="isMultigraph();">Verificar multigrafo</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="isWheelGraph();">Verificar grafo rueda</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="isCompleteGraph();">Verificar grafo completo</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="regular();">Verificar grafo regular</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="isSimplePath();">Verificar recorrido simple</button>
+                                </div>
+                                <!-- END SECONDARY ZONE -->
+                                <!-- DANGER ZONE -->
+                                <div class="w-100">
+                                    <h4>Zona de peligro</h4>
+                                    <hr />
+                                    <!-- DELETE -->
+                                    <button type="button" class="btn btn-danger mb-3 mt-3" data-toggle="modal" data-target="#primary-network-delete-node-modal">Eliminar nodo</button>
+                                    <button type="button" class="btn btn-danger mb-3 mt-3" data-toggle="modal" data-target="#primary-network-clear-canvas-modal">Limpiar canvas</button>
+                                </div>
+                                <!-- END DANGER ZONE -->
+                                <!-- INFORMATION ZONE -->
+                                <div class="information">
+                                    <div class="container">
+                                        <div class="row">
+                                            <h6>Cantidad de nodos</h6>
+                                            :
+                                            <p id="primary-network-node-count"></p>
+                                        </div>
+                                        <div class="row">
+                                            <h6>Cantidad de caminos</h6>
+                                            :
+                                            <p id="primary-network-edge-count"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- MODALS  -->
+                            <!-- MODAL AÑADIR CAMINO -->
+                            <div class="modal fade" id="primary-network-add-edge-modal" tabindex="-1" aria-labelledby="addEdgeModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addEdgeModalLabel">Añadir un camino</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                Para agregar un camino, debes seleccionar desde que punto de inicio, y un punto de destino, para ello, selecciona un valor desde la
+                                                lista
+                                                <strong>Desde</strong> y un valor desde la lista <strong>Hacia</strong>. Finalmente, necesitas agregar un peso a el camino
+                                                rellenando el campo
+                                                <strong>Peso de arista</strong>
+                                            </p>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h6>Desde</h6>
+                                                    <select class="form-control" name="edges-select" required id="primary-network-edge-from"></select>
+                                                </div>
+                                                <div class="col">
+                                                    <h6>Hasta</h6>
+                                                    <select class="form-control" name="edges-select" id="primary-network-edge-to"></select>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 mt-2">
+                                                <label class="form-label">Peso de arista</label>
+                                                <input id="primary-network-edge-weight" min="1" required value="1" type="number" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-outline-primary" data-dismiss="modal" onclick="addRandomEdge();">Random</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addEdge();">Añadir camino</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- MODAL DELETE RUTA -->
+                            <div class="modal fade" id="primary-network-clear-canvas-modal" tabindex="-1" aria-labelledby="primary-network-clear-canvas-modal-label" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title" id="primary-network-clear-canvas-modal-label">Deseas eliminar todos los nodos y caminos?</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Esta opción es irreversible, no podrás volver a su forma anterior</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-danger mb-3 mt-3" onclick="clearData()">Limpiar canvas</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- MODAL DELETE RUTA -->
+                            <div class="modal fade" id="primary-network-delete-node-modal" tabindex="-1" aria-labelledby="deleteNodeLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title" id="deleteNodeLabel">Eliminar nodo</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                Para eliminar un nodo, seleccione una ID, que se muestra en la lista desplegable, luego, haga click en el boton<strong
+                                                    >Eliminar</strong
+                                                >
+                                            </p>
+                                            <hr />
+                                            <div class="formulario p-2 bd-highlight col">
+                                                <div role="tabpanel" id="shortestPath">
+                                                    <h5>Escoge un nodo</h5>
+                                                    <p>Al eliminar un nodo, se eliminarán de forma automatica todos los caminos que tienen relacion con el nodo a eliminar</p>
+                                                    <div class="form-inline form-group">
+                                                        <div class="row">
+                                                            <select class="form-control text-center" name="primary-network-nodes" id="primary-network-delete-node-select"></select>
+                                                        </div>
+                                                        <div id="Camino" class="mt-3 justify-center"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                            <input type="button" onclick="deleteNode();" class="btn btn-danger" data-dismiss="modal" value="Eliminar nodo" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- MODAL AÑADIR NODO -->
+                            <div class="modal fade" id="primary-network-add-node-modal" tabindex="-1" role="dialog" aria-labelledby="primary-network-add-node-modal-label" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="primary-network-add-node-modal-label">Añadir un nodo</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="w-100">
+                                                <p class="w-100">
+                                                    Para agregar un nodo, haga click en el botón
+                                                    <strong>Agregar</strong>, luego según sus necesidades,puede insertar un nodo con valores aleatorios haciendo click en el botón
+                                                    <strong>Random</strong>, o puede usted agregar un nodo con valores, rellenando los valores necesarios, luego haga click en el
+                                                    boton
+                                                    <strong>Agregar nodo</strong>
+                                                </p>
+                                                <hr />
+                                            </div>
+                                            <div class="alert alert-warning alert-dismissible fade show" id="addAlert" role="alert">
+                                                El <strong>valor</strong> no debe estar vacio, revisa tus datos
+                                                <button type="button" class="close h-100" data-dismiss="alert">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <h6>Color</h6>
+                                            <input type="color" class="form-control mb-3" id="primary-network-node-color" aria-label="color" />
+                                            <h6>Valor</h6>
+                                            <div class="input-group mb-3">
+                                                <input
+                                                    id="primary-network-node-value"
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="Ingresa un valor"
+                                                    aria-label="Valor"
+                                                    aria-describedby="basic-addon1"
+                                                />
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h6>Desde</h6>
+                                                    <select class="form-control" name="edges-select" id="primary-network-node-from">
+                                                        <option selected="selected">Selecciona un nodo...</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    <h6>Peso arista</h6>
+                                                    <input
+                                                        type="text"
+                                                        class="form-control"
+                                                        id="primary-network-node-label"
+                                                        placeholder=""
+                                                        aria-label="Peso arista"
+                                                        aria-describedby="basic-addon1"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-outline-primary" onclick="addRandomNodeToPrimaryNetwork();">Random</button>
+                                            <button type="button" class="btn btn-primary" onclick="addNodeToPrimaryNetwork();">Añadir</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- MODAL SHOW MATRIX -->
+                            <div class="modal fade" id="primary-network-show-matrix" tabindex="-1" aria-labelledby="primary-network-show-matrix-label" aria-hidden="true">
+								PRIMARY
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title" id="primary-network-show-matrix-label">Matriz de adyacencia</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <div id="primary-network-matrix-container"></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="primary-network" class="w-100 mb-5"></div>
+                    </div>
+                    <div class="col">
+                        <div class="align-items-stretch">
+                            <h1>Grafo N°2</h1>
+                            <div class="col">
+                                <!-- AÑADIR NODO -->
+                                <button type="button" class="btn btn-primary mb-3 mt-3" data-toggle="modal" data-target="#secondary-network-add-node-modal">Añadir nodo</button>
+                                <!-- AÑADIR CAMINO -->
+                                <button type="button" class="btn btn-primary mb-3 mt-3" data-toggle="modal" data-target="#secondary-network-add-edge-modal">Agregar camino</button>
+                                <button id="conexo" href="javascript:;" onclick="recargarSN();" class="btn btn-primary">Conexo</button>
+                                <input type="button" class="btn btn-primary mb-3 mt-3" value="Euleriano" onclick="imprimireulerianoSN()" />
+                                <input type="button" class="btn btn-primary mb-3 mt-3" value="Hamiltoniano" onclick="imprimirhamiltoniano2SN()" />
+                                <!-- <input class="btn btn-primary mb-3 mt-3" type="button" value="s" onclick="createSecondaryTable()" /> -->
+                                <!-- <button type="button" class="btn btn-primary mb-3 mt-3" onclick="show();">Mostrar matriz</button> -->
+                                <button type="button" class="btn btn-primary mb-3 mt-3" data-toggle="modal" data-target="#secondary-network-show-matrix" onclick="showSN();">
+                                    Matriz de adyacencia
+                                </button>
+                                <div id="download" class=""></div>
+
+                                <!-- SECONDARY ZONE -->
+                                <div class="w-100">
+                                    <h4>Acciones secundarias</h4>
+                                    <hr />
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="deleteArrowsSN();">Eliminar flechas</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="setArrowsSN();">Reasignar flechas</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="isWeightedGraphSN();">Grafo ponderado</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="isDirectionalGraphSN();">Verificar direcciones</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="isMultigraphSN();">Verificar multigrafo</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="isWheelGraphSN();">Verificar grafo rueda</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="isCompleteGraphSN();">Verificar grafo completo</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="regularSN();">Verificar grafo regular</button>
+                                    <button type="button" class="btn btn-secondary mb-3 mt-3" onclick="isSimplePathSN();">Verificar recorrido simple</button>
+                                </div>
+                                <!-- END SECONDARY ZONE -->
+
+                                <!-- DANGER ZONE -->
+                                <div class="w-100">
+                                    <h4>Zona de peligro</h4>
+                                    <hr />
+                                    <button type="button" class="btn btn-danger mb-3 mt-3" data-toggle="modal" data-target="#secondary-network-delete-node-modal">
+                                        Eliminar nodo
+                                    </button>
+                                    <button type="button" class="btn btn-danger mb-3 mt-3" data-toggle="modal" data-target="#secondary-network-clear-canvas-modal">
+                                        Limpiar canvas
+                                    </button>
+                                </div>
+                                <!-- END DANGER ZONE -->
+
+                                <!-- INFORMATION ZONE -->
+                                <div class="information">
+                                    <div class="container">
+                                        <div class="row">
+                                            <h6>Cantidad de nodos</h6>
+                                            :
+                                            <p id="secondary-network-node-count"></p>
+                                        </div>
+                                        <div class="row">
+                                            <h6>Cantidad de caminos</h6>
+                                            :
+                                            <p id="secondary-network-edge-count"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- MODALS  -->
+                            <!-- MODAL DELETE RUTA -->
+                            <div
+                                class="modal fade"
+                                id="secondary-network-delete-node-modal"
+                                tabindex="-1"
+                                aria-labelledby="secondary-network-delete-node-modal-label"
+                                aria-hidden="true"
+                            >
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title" id="secondary-network-delete-node-modal-label">Eliminar nodo</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                Para eliminar un nodo, seleccione una ID, que se muestra en la lista desplegable, luego, haga click en el boton<strong
+                                                    >Eliminar</strong
+                                                >
+                                            </p>
+                                            <hr />
+                                            <div class="formulario p-2 bd-highlight col">
+                                                <div role="tabpanel" id="shortestPath">
+                                                    <h5>Escoge un nodo</h5>
+                                                    <p>Al eliminar un nodo, se eliminarán de forma automatica todos los caminos que tienen relacion con el nodo a eliminar</p>
+                                                    <div class="form-inline form-group">
+                                                        <div class="row">
+                                                            <select
+                                                                class="form-control text-center"
+                                                                name="secondary-network-nodes"
+                                                                id="secondary-network-delete-node-select"
+                                                            ></select>
+                                                        </div>
+                                                        <div id="Camino" class="mt-3 justify-center"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                            <input type="button" onclick="deleteNodeSN();" class="btn btn-danger" data-dismiss="modal" value="Eliminar nodo" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- MODAL DELETE RUTA -->
+                            <div
+                                class="modal fade"
+                                id="secondary-network-clear-canvas-modal"
+                                tabindex="-1"
+                                aria-labelledby="secondary-network-clear-canvas-modal-label"
+                                aria-hidden="true"
+                            >
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title" id="secondary-network-clear-canvas-modal-label">Deseas eliminar todos los nodos y caminos?</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Esta opción es irreversible, no podrás volver a su forma anterior</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-danger mb-3 mt-3" onclick="clearDataSN()">Limpiar canvas</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- MODAL AÑADIR CAMINO -->
+                            <div class="modal fade" id="secondary-network-add-edge-modal" tabindex="-1" aria-labelledby="secondary-network-add-edge-modal-label" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="secondary-network-add-edge-modal-label">Añadir un camino</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                Para agregar un camino, debes seleccionar desde que punto de inicio, y un punto de destino, para ello, selecciona un valor desde la
+                                                lista
+                                                <strong>Desde</strong> y un valor desde la lista <strong>Hacia</strong>. Finalmente, necesitas agregar un peso a el camino
+                                                rellenando el campo
+                                                <strong>Peso de arista</strong>
+                                            </p>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h6>Desde</h6>
+                                                    <select class="form-control" name="edges-select" required id="secondary-network-edge-from"></select>
+                                                </div>
+                                                <div class="col">
+                                                    <h6>Hasta</h6>
+                                                    <select class="form-control" name="edges-select" id="secondary-network-edge-to"></select>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 mt-2">
+                                                <label class="form-label">Peso de arista</label>
+                                                <input id="secondary-network-edge-weight" min="1" required value="1" type="number" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-outline-primary" data-dismiss="modal" onclick="addRandomEdgeSN();">Random</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addEdgeSN();">Añadir camino</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- MODAL AÑADIR NODO -->
+                            <div
+                                class="modal fade"
+                                id="secondary-network-add-node-modal"
+                                tabindex="-1"
+                                role="dialog"
+                                aria-labelledby="secondary-network-add-node-modal-label"
+                                aria-hidden="true"
+                            >
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="secondary-network-add-node-modal-label">Añadir un nodo</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="w-100">
+                                                <p class="w-100">
+                                                    Para agregar un nodo, haga click en el botón
+                                                    <strong>Agregar</strong>, luego según sus necesidades,puede insertar un nodo con valores aleatorios haciendo click en el botón
+                                                    <strong>Random</strong>, o puede usted agregar un nodo con valores, rellenando los valores necesarios, luego haga click en el
+                                                    boton
+                                                    <strong>Agregar nodo</strong>
+                                                </p>
+                                                <hr />
+                                            </div>
+                                            <div class="alert alert-warning alert-dismissible fade show" id="addAlert" role="alert">
+                                                El <strong>valor</strong> no debe estar vacio, revisa tus datos
+                                                <button type="button" class="close h-100" data-dismiss="alert">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <h6>Color</h6>
+                                            <input type="color" class="form-control mb-3" id="secondary-network-node-color" aria-label="color" />
+                                            <h6>Valor</h6>
+                                            <div class="input-group mb-3">
+                                                <input
+                                                    id="secondary-network-node-value"
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="Ingresa un valor"
+                                                    aria-label="Valor"
+                                                    aria-describedby="basic-addon1"
+                                                />
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h6>Desde</h6>
+                                                    <select class="form-control" name="edges-select" id="secondary-network-node-from">
+                                                        <option selected="selected">Selecciona un nodo...</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    <h6>Peso arista</h6>
+                                                    <input
+                                                        type="text"
+                                                        class="form-control"
+                                                        id="secondary-network-node-label"
+                                                        placeholder=""
+                                                        aria-label="Peso arista"
+                                                        aria-describedby="basic-addon1"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-outline-primary" onclick="addRandomNodeToSecondaryNetwork();">Random</button>
+                                            <button type="button" class="btn btn-primary" onclick="addNodeToSecondaryNetwork();">Añadir</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- MODAL SHOW MATRIX -->
+                            <div class="modal fade" id="secondary-network-show-matrix" tabindex="-1" aria-labelledby="secondary-network-show-matrix-label" aria-hidden="true">
+								SECONDARY
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title" id="secondary-network-show-matrix-label">Matriz de adyacencia</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <div id="secondary-network-matrix-container"></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="secondary-network" class="w-100 mb-5"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- jQuery, Popper.js, Bootstrap JS -->
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"
+        ></script>
+    </body>
+</html>
